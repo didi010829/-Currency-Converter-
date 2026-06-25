@@ -453,8 +453,7 @@ from history_manager import HistoryManager
 from currency_api import CurrencyAPI
 from converter import Converter
 
-# Для тестов используем фиктивный API-ключ (не будет реальных запросов)
-TEST_API_KEY = "test_key"
+TEST_API_KEY = "didi010829"
 
 class TestConversion(unittest.TestCase):
     def test_creation(self):
