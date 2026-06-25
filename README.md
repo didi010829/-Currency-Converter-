@@ -1,4 +1,42 @@
 # -Currency-Converter
+import tkinter as tk
+from tkinter import ttk, messagebox
+import requests
+import json
+import os
+from datetime import datetime
+
+#  Конфигурация 
+API_KEY = "didi010829"
+BASE_URL = "https://v6.exchangerate-api.com/v6"
+HISTORY_FILE = "history.json"
+
+# Загрузка/сохранение истории 
+def load_history():
+    if os.path.exists(HISTORY_FILE):
+        with open(HISTORY_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+def save_history(history):
+    with open(HISTORY_FILE, "w", encoding="utf-8") as f:
+        json.dump(history, f, ensure_ascii=False, indent=2)
+
+#  Получение курса 
+def get_exchange_rate(from_currency, to_currency):
+    """Возвращает курс из from_currency в to_currency или None при ошибке."""
+    url = f"{BASE_URL}/{API_KEY}/pair/{from_currency}/{to_currency}"
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        if data["result"] == "success":
+            return data["conversion_rate"]
+        else:
+            return None
+    except Exception as e:
+        messagebox.showerror("Ошибка", f"Не удалось получить курс: {e}")
+        return None
 # Основной класс приложения 
 class CurrencyConverterApp:
     def __init__(self, root):
